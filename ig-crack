@@ -54,13 +54,13 @@ while IFS=$'\n' read LINE; do
     fi
 
     # Handle special cases
-    if [ "${IGLIST[0]}" = "VIVA-4G-LTE-" ]; then
-        imeigen "${IGLIST[0]}" "${IGLIST[1]}" | sed 's/^/VIVA/' | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000
-    elif [ "${IGLIST[0]}" = "501HWa-" ]; then
-        imeigen "${IGLIST[0]}" "${IGLIST[1]}" | sed 's/$/a/' | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000
-    else
-        imeigen "${IGLIST[0]}" "${IGLIST[1]}" | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000
-    fi
+    case "${IGLIST[0]}" in
+        '501HWa-') imeigen "${IGLIST[0]}" "${IGLIST[1]}" | sed 's/$/a/' | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000 ;;
+        'VIVA-4G-LTE-') imeigen "${IGLIST[0]}" "${IGLIST[1]}" | sed 's/^/VIVA/' | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000 ;;
+        'SprintHotspot5.0') imeigen "${IGLIST[0]}" "${IGLIST[1]}" | sed 's/$/a/' | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000 ;;
+        'SprintHotspot2.4') imeigen "${IGLIST[0]}" "${IGLIST[1]}" | sed 's/$/b/' | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000 ;;
+        *) imeigen "${IGLIST[0]}" "${IGLIST[1]}" | hashcat -a0 -m22000 --logfile-disable --self-test-disable -o "$BASEIN"_partial.mac --potfile-path "$BASEIN"_partial.pot "$BASEIN"_partial.22000
+    esac
 
     # Cleanup
     rm -f "$BASEIN"_partial.22000
